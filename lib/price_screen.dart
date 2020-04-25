@@ -48,6 +48,7 @@ class _PriceScreenState extends State<PriceScreen> {
         });
   }
   void showResponse() async {
+    print('hey');
     Map body = await CurrencyBrain().getResponse();
     print(body.toString());
   }
