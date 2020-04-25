@@ -1,3 +1,4 @@
+import 'package:bitcoin_ticker/currency_brain.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bitcoin_ticker/coin_data.dart';
@@ -46,7 +47,16 @@ class _PriceScreenState extends State<PriceScreen> {
           });
         });
   }
+  void showResponse() async {
+    Map body = await CurrencyBrain().getResponse();
+    print(body.toString());
+  }
 
+  @override
+  void initState() {
+    super.initState();
+    showResponse();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
