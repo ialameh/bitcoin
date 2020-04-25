@@ -49,8 +49,8 @@ class _PriceScreenState extends State<PriceScreen> {
   }
   void showResponse() async {
     print('hey');
-    Map body = await CurrencyBrain().getResponse();
-    print(body.toString());
+    double body = await CurrencyBrain().getResponse(bitcoin: 'BTC', currency: 'USD');
+    print(body);
   }
 
   @override
