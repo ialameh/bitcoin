@@ -3,16 +3,20 @@ import 'dart:convert';
 
 class CurrencyBrain {
 
-String apiKey = '9050997F-D969-4EDF-9CBE-D1CE58EDAE73';
+String apiKey = '7FE38758-6097-434E-86E9-8CF4FBBAAA10';
 
 var headerString = 'X-CoinAPI-Key';
 
 
-Future<double> getResponse({String bitcoin, String currency}) async {
-  var url = 'https://rest.coinapi.io/v1/exchangerate/$bitcoin/$currency'; 
-  http.Response response = await http.get(url, headers: {headerString : apiKey });
-  var responseData = jsonDecode(response.body);
-  return responseData['rate'];
-}
+Future<Map> getResponse(String currency) async {
+  var url = 'https://rest.coinapi.io/v1/exchangerate'; 
+  http.Response btc = await http.get('$url/BTC/$currency', headers: {headerString : apiKey });
+  //http.Response eth = await http.get('$url/ETH/$currency', headers: {headerString : apiKey });
+  //http.Response ltc = await http.get('$url/LTC/$currency', headers: {headerString : apiKey });
+  var btcRate = jsonDecode(btc.body)['rate'].toStringAsFixed(0);
+  var ethRate = jsonDecode(btc.body)['rate'].toStringAsFixed(0);
+  var ltcRate = jsonDecode(btc.body)['rate'].toStringAsFixed(0);
+  return {'BTC': btcRate, 'ETH' : ethRate, 'LTC': ltcRate};
 
+}
 }

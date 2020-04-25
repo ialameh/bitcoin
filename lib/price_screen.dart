@@ -11,6 +11,7 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedValue = 'USD';
+  Map  rates  = {'BTC' : '?', 'ETH' : '?', 'ELT' : '?'};
   Widget getPicker() {
     Widget selectedPicker;
     try {
@@ -29,6 +30,8 @@ class _PriceScreenState extends State<PriceScreen> {
     return CupertinoPicker(
       itemExtent: 32.0,
       onSelectedItemChanged: (value) {
+        selectedValue = CoinData.getCurrency(value);
+        getRates(selectedValue);
         setState(() {
           selectedValue = CoinData.getCurrency(value);
         });
@@ -42,24 +45,27 @@ class _PriceScreenState extends State<PriceScreen> {
         value: selectedValue,
         items: CoinData.menuItemsAndroid(),
         onChanged: (value) {
+          getRates(value);
           setState(() {
             selectedValue = value;
           });
         });
   }
-  void showResponse() async {
-    print('hey');
-    double body = await CurrencyBrain().getResponse(bitcoin: 'BTC', currency: 'USD');
-    print(body);
+  void getRates(String currency) async {
+    dynamic response = await CurrencyBrain().getResponse(currency);
+    setState(() {
+      rates = response;
+    });
   }
 
   @override
-  void initState() {
+  void initState()  {
     super.initState();
-    showResponse();
+    getRates('USD');
   }
   @override
   Widget build(BuildContext context) {
+    print(rates.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
@@ -79,7 +85,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = ? USD',
+                  ('BTC ${rates['BTC']}'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
